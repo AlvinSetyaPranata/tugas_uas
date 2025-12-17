@@ -125,3 +125,117 @@ const categories = <String>[
   'Marketing',
   'Soft Skills',
 ];
+
+class StudentMetric {
+  const StudentMetric({
+    required this.label,
+    required this.value,
+    required this.helper,
+    required this.color,
+    required this.icon,
+  });
+
+  final String label;
+  final String value;
+  final String helper;
+  final Color color;
+  final IconData icon;
+}
+
+class LearningPlan {
+  const LearningPlan({
+    required this.title,
+    required this.tag,
+    required this.mentor,
+    required this.schedule,
+    required this.progressLabel,
+    required this.color,
+  });
+
+  final String title;
+  final String tag;
+  final String mentor;
+  final String schedule;
+  final String progressLabel;
+  final Color color;
+}
+
+class BulletinItem {
+  const BulletinItem({
+    required this.title,
+    required this.date,
+    required this.tag,
+    required this.description,
+  });
+
+  final String title;
+  final String date;
+  final String tag;
+  final String description;
+}
+
+const studentMetrics = <StudentMetric>[
+  StudentMetric(
+    label: 'Attendance',
+    value: '92%',
+    helper: 'On track this month',
+    color: AppColors.secondary,
+    icon: Icons.task_alt_rounded,
+  ),
+  StudentMetric(
+    label: 'Assignments',
+    value: '18/20',
+    helper: '2 waiting for review',
+    color: AppColors.accent,
+    icon: Icons.assignment_turned_in_outlined,
+  ),
+  StudentMetric(
+    label: 'Mentoring',
+    value: '6h',
+    helper: 'Book next session',
+    color: AppColors.primary,
+    icon: Icons.headset_mic_rounded,
+  ),
+];
+
+const learningPlans = <LearningPlan>[
+  LearningPlan(
+    title: 'UI Foundation & Research',
+    tag: 'Batch 12',
+    mentor: 'Mentor Rani Eka',
+    schedule: 'Sen, 09:00 - 11:00 WIB',
+    progressLabel: 'Pertemuan 6/12',
+    color: Color(0xFFFFE6E0),
+  ),
+  LearningPlan(
+    title: 'Interaction & Prototype',
+    tag: 'Mini Sprint',
+    mentor: 'Mentor Aditya',
+    schedule: 'Rabu, 13:00 - 15:00 WIB',
+    progressLabel: 'Pertemuan 3/8',
+    color: Color(0xFFFFF1C6),
+  ),
+  LearningPlan(
+    title: 'Career Preparation',
+    tag: 'Coaching',
+    mentor: 'Mentor Shinta',
+    schedule: 'Jumat, 19:00 - 20:30 WIB',
+    progressLabel: 'Pertemuan 1/4',
+    color: Color(0xFFE3F7FB),
+  ),
+];
+
+const bulletinItems = <BulletinItem>[
+  BulletinItem(
+    title: 'Penilaian Sprint 02 dibuka',
+    date: '18 Desember 2024',
+    tag: 'Akademik',
+    description: 'Upload hasil studi kasus maksimal Jumat pukul 23.00 WIB melalui LMS.',
+  ),
+  BulletinItem(
+    title: 'Sesi sharing dengan alumni',
+    date: '20 Desember 2024',
+    tag: 'Komunitas',
+    description: 'Belajar strategi interview dengan Alumni Batch 08. Daftar sebelum 19 Des.',
+  ),
+];
