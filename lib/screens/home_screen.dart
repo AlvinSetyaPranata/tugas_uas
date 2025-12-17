@@ -270,61 +270,78 @@ class _ProgramCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 360;
+        final infoColumn = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Program UI/UX Intensif',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Sesi berikutnya Sen • 09.00 WIB • Studio Hybrid',
+              style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: 14),
+            const Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                Text(
-                  'Program UI/UX Intensif',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Sesi berikutnya Sen • 09.00 WIB • Studio Hybrid',
-                  style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
-                ),
-                const SizedBox(height: 14),
-                const Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _TagChip(label: 'Batch 12'),
-                    _TagChip(label: 'Hybrid class'),
-                    _TagChip(label: 'Mentor Rani'),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                PrimaryButton(
-                  label: 'Mulai kelas',
-                  icon: Icons.arrow_forward_rounded,
-                  expanded: false,
-                  onPressed: () => Navigator.pushNamed(context, '/dashboard'),
-                ),
+                _TagChip(label: 'Batch 12'),
+                _TagChip(label: 'Hybrid class'),
+                _TagChip(label: 'Mentor Rani'),
               ],
             ),
-          ),
-          Container(
-            height: 96,
-            width: 96,
-            decoration: BoxDecoration(
-              color: AppColors.secondary.withOpacity(.25),
-              borderRadius: BorderRadius.circular(28),
+            const SizedBox(height: 18),
+            PrimaryButton(
+              label: 'Mulai kelas',
+              icon: Icons.arrow_forward_rounded,
+              expanded: true,
+              onPressed: () => Navigator.pushNamed(context, '/dashboard'),
             ),
-            child: const Icon(Icons.play_circle_outline, size: 46, color: AppColors.primary),
+          ],
+        );
+
+        final badge = Container(
+          height: 96,
+          width: 96,
+          decoration: BoxDecoration(
+            color: AppColors.secondary.withOpacity(.25),
+            borderRadius: BorderRadius.circular(28),
           ),
-        ],
-      ),
+          child: const Icon(Icons.play_circle_outline, size: 46, color: AppColors.primary),
+        );
+
+        return Container(
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: isCompact
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    infoColumn,
+                    const SizedBox(height: 20),
+                    badge,
+                  ],
+                )
+              : Row(
+                  children: [
+                    Expanded(child: infoColumn),
+                    const SizedBox(width: 16),
+                    badge,
+                  ],
+                ),
+        );
+      },
     );
   }
 }
