@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCategory = categories.first;
+  int _navIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -178,10 +179,25 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(icon: Icon(Icons.people_alt_outlined), label: 'Community'),
           NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
-        selectedIndex: 0,
+        selectedIndex: _navIndex,
         onDestinationSelected: (index) {
-          if (index == 1) {
-            Navigator.pushNamed(context, '/dashboard');
+          if (index == _navIndex) return;
+          setState(() => _navIndex = index);
+          switch (index) {
+            case 0:
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/dashboard').then((_) {
+                if (mounted) setState(() => _navIndex = 0);
+              });
+              break;
+            default:
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(const SnackBar(content: Text('This section is coming soon.')))
+                  .closed
+                  .then((_) {
+                if (mounted) setState(() => _navIndex = 0);
+              });
           }
         },
       ),
