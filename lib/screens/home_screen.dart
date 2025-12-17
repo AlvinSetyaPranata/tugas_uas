@@ -24,18 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: isHome ? null : _buildAppBar(),
       body: IndexedStack(
         index: _navIndex,
-        children: const [
-          _HomeTabContent(),
-          DashboardBody(includeTopPadding: false),
-          _ComingSoonTab(
+        children: [
+          _HomeTabContent(onAccountTap: _openAccountDialog),
+          const DashboardBody(includeTopPadding: false),
+          const _ComingSoonTab(
             title: 'Forum Komunitas',
             description: 'Tempat diskusi tugas, update kegiatan cohort, dan info lomba.',
             icon: Icons.forum_outlined,
-          ),
-          _ComingSoonTab(
-            title: 'Profil Saya',
-            description: 'Pantau sertifikat, pembayaran, dan preferensi akun.',
-            icon: Icons.person_outline,
           ),
         ],
       ),
@@ -45,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'Beranda'),
           NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book_rounded), label: 'Belajar'),
           NavigationDestination(icon: Icon(Icons.forum_outlined), selectedIcon: Icon(Icons.forum_rounded), label: 'Komunitas'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profil'),
         ],
         selectedIndex: _navIndex,
         onDestinationSelected: (value) => setState(() => _navIndex = value),
@@ -58,11 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return AppBar(title: const Text('Modul Belajar'), actions: _defaultActions);
       case 2:
-        return AppBar(title: const Text('Forum Komunitas'));
-      case 3:
-        return AppBar(title: const Text('Profil Saya'), actions: _defaultActions);
+        return AppBar(title: const Text('Forum Komunitas'), actions: _defaultActions);
       default:
-        return AppBar(title: const Text('Lumi LMS'));
+        return AppBar(title: const Text('Lumi LMS'), actions: _defaultActions);
     }
   }
 
@@ -70,18 +62,85 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
         IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
         const SizedBox(width: 4),
-        const Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: CircleAvatar(
-            backgroundColor: AppColors.primary,
-            child: Text('AL'),
-          ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: _AccountButton(onTap: _openAccountDialog),
         ),
       ];
+
+  Future<void> _openAccountDialog() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Center(
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Akun saya',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                ),
+                const SizedBox(height: 12),
+                const Row(
+                  children: [
+                    CircleAvatar(radius: 26, backgroundColor: AppColors.primary, child: Text('AL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Alesha Paramita', style: TextStyle(fontWeight: FontWeight.w600)),
+                          SizedBox(height: 4),
+                          Text('hello@lumi.design', style: TextStyle(color: AppColors.textSecondary)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                PrimaryButton(
+                  label: 'Logout',
+                  icon: Icons.logout_rounded,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Tutup'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _HomeTabContent extends StatelessWidget {
-  const _HomeTabContent();
+  const _HomeTabContent({required this.onAccountTap});
+
+  final VoidCallback onAccountTap;
 
   @override
   Widget build(BuildContext context) {
@@ -89,28 +148,30 @@ class _HomeTabContent extends StatelessWidget {
       color: AppColors.primary,
       child: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(24, 16, 24, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _HomeHeader(),
-                  SizedBox(height: 20),
-                  _ProgramCard(),
-                ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _HomeHeader(onAccountTap: onAccountTap),
+                    const SizedBox(height: 20),
+                    const _ProgramCard(),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: Container(
+              Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: AppColors.background,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                 ),
-                child: const SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(24, 24, 24, 32),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 32, 24, 32),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -133,8 +194,8 @@ class _HomeTabContent extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -142,7 +203,9 @@ class _HomeTabContent extends StatelessWidget {
 }
 
 class _HomeHeader extends StatelessWidget {
-  const _HomeHeader();
+  const _HomeHeader({required this.onAccountTap});
+
+  final VoidCallback onAccountTap;
 
   @override
   Widget build(BuildContext context) {
@@ -168,15 +231,35 @@ class _HomeHeader extends StatelessWidget {
             ],
           ),
         ),
-        const CircleAvatar(
-          radius: 28,
-          backgroundColor: Colors.white,
-          child: Text(
-            'AL',
-            style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+        GestureDetector(
+          onTap: onAccountTap,
+          child: const CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.white,
+            child: Text(
+              'AL',
+              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AccountButton extends StatelessWidget {
+  const _AccountButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: const CircleAvatar(
+        backgroundColor: AppColors.primary,
+        child: Text('AL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+      ),
     );
   }
 }
