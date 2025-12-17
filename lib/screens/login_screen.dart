@@ -146,6 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   const SizedBox(height: 16),
                                   Center(
                                     child: TextButton(
+                                      onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
+                                      child: const Text('Create a new account'),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Center(
+                                    child: TextButton(
                                       onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
                                       child: const Text('Visit dashboard'),
                                     ),

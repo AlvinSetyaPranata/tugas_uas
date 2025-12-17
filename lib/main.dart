@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
 import 'screens/splash_screen.dart';
 import 'theme.dart';
 
@@ -13,6 +14,7 @@ void main() {
 class AppRoutes {
   static const splash = '/';
   static const login = '/login';
+  static const register = '/register';
   static const home = '/home';
   static const dashboard = '/dashboard';
 }
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.splash: (_) => const SplashScreen(),
         AppRoutes.login: (_) => const LoginScreen(),
+        AppRoutes.register: (_) => const RegisterScreen(),
         AppRoutes.home: (_) => const HomeScreen(),
         AppRoutes.dashboard: (_) => const DashboardScreen(),
       },
