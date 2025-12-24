@@ -1,0 +1,38 @@
+{
+  "title": "UI/UX Design Quiz",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the primary goal of User Experience (UX) Design?",
+      "options": [
+        "To make the product look beautiful",
+        "To ensure the product is functional and usable",
+        "To write the code for the product",
+        "To market the product to users"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 2,
+      "question": "Which of the following is NOT a phase in the Design Thinking process?",
+      "options": [
+        "Empathize",
+        "Define",
+        "Compile",
+        "Prototype"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 3,
+      "question": "What does 'UI' stand for?",
+      "options": [
+        "User Interface",
+        "User Interaction",
+        "User Integration",
+        "User Information"
+      ],
+      "correctIndex": 0
+    }
+  ]
+}
