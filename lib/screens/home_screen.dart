@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../data/lms_data.dart';
 import '../theme.dart';
 import '../widgets/primary_button.dart';
-import 'dashboard_screen.dart';
 import 'learning_detail_screen.dart';
+import 'learning_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _navIndex,
         children: [
           _HomeTabContent(onAccountTap: _openAccountDialog),
-          const DashboardBody(includeTopPadding: false),
+          const LearningListScreen(),
           const _ComingSoonTab(
             title: 'Forum Komunitas',
             description: 'Tempat diskusi tugas, update kegiatan cohort, dan info lomba.',
