@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class DetailQuizScreen extends StatefulWidget {
-  const DetailQuizScreen({super.key});
+  const DetailQuizScreen({super.key, this.quizId});
+
+  final String? quizId;
 
   @override
   State<DetailQuizScreen> createState() => _DetailQuizScreenState();
@@ -11,6 +13,7 @@ class DetailQuizScreen extends StatefulWidget {
 
 class _DetailQuizScreenState extends State<DetailQuizScreen> {
   List<dynamic> _questions = [];
+  String _quizTitle = 'Quiz';
   int _currentIndex = 0;
   int? _selectedOptionIndex;
   int _score = 0;
@@ -26,11 +29,26 @@ class _DetailQuizScreenState extends State<DetailQuizScreen> {
     try {
       final String jsonString = await DefaultAssetBundle.of(context)
           .loadString('assets/quiz_data.json');
-      final Map<String, dynamic> data = json.decode(jsonString);
-      setState(() {
-        _questions = data['questions'];
-        _isLoading = false;
-      });
+      final List<dynamic> data = json.decode(jsonString);
+      
+      final quizData = data.firstWhere(
+        (quiz) => quiz['id'] == widget.quizId,
+        orElse: () => data.isNotEmpty ? data.first : null,
+      );
+
+      if (quizData != null) {
+        setState(() {
+          _questions = quizData['questions'];
+          _quizTitle = quizData['title'] ?? 'Quiz';
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+           _questions = [];
+           _isLoading = false;
+        });
+      }
+
     } catch (e) {
       debugPrint('Error loading quiz data: $e');
       setState(() {
@@ -102,7 +120,7 @@ class _DetailQuizScreenState extends State<DetailQuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz ${_currentIndex + 1}/${_questions.length}'),
+        title: Text('$_quizTitle (${_currentIndex + 1}/${_questions.length})'),
         centerTitle: true,
       ),
       body: SafeArea(

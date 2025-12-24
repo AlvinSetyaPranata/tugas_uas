@@ -1,19 +1,69 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../data/lms_data.dart';
 import '../theme.dart';
 import '../widgets/primary_button.dart';
+import 'detail_quiz_screen.dart';
 
-class LearningDetailScreen extends StatelessWidget {
+class LearningDetailScreen extends StatefulWidget {
   const LearningDetailScreen({super.key, required this.plan});
 
   final LearningPlan plan;
 
   @override
+  State<LearningDetailScreen> createState() => _LearningDetailScreenState();
+}
+
+class _LearningDetailScreenState extends State<LearningDetailScreen> {
+  List<_LearningModule> _modules = [];
+  bool _isLoadingModules = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadModules();
+  }
+
+  Future<void> _loadModules() async {
+    try {
+      final String jsonString = await DefaultAssetBundle.of(context)
+          .loadString('assets/learning_modules.json');
+      final Map<String, dynamic> data = json.decode(jsonString);
+
+      final List<dynamic>? modulesJson = data[widget.plan.title];
+
+      if (modulesJson != null) {
+        setState(() {
+          _modules = modulesJson
+              .map((m) => _LearningModule(
+                    title: m['title'],
+                    duration: m['duration'],
+                    deliverable: m['deliverable'],
+                    quizId: m['quizId'],
+                  ))
+              .toList();
+          _isLoadingModules = false;
+        });
+      } else {
+        setState(() {
+           _modules = _defaultModules; // Fallback to default if not found in JSON
+           _isLoadingModules = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading modules: $e');
+      setState(() {
+        _modules = _defaultModules; // Fallback on error
+        _isLoadingModules = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final modules = _modulesByPlan[plan.title] ?? _defaultModules;
-    final references = _referencesByPlan[plan.title] ?? _defaultReferences;
+    final references = _referencesByPlan[widget.plan.title] ?? _defaultReferences;
 
     return Scaffold(
       body: CustomScrollView(
@@ -21,7 +71,7 @@ class LearningDetailScreen extends StatelessWidget {
           SliverAppBar(
             pinned: true,
             expandedHeight: 250,
-            backgroundColor: plan.color,
+            backgroundColor: widget.plan.color,
             automaticallyImplyLeading: true,
             title: const Text('Detail kelas'),
             titleSpacing: 0,
@@ -32,7 +82,7 @@ class LearningDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    plan.tag,
+                    widget.plan.tag,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: AppColors.primaryDark,
                       fontWeight: FontWeight.w700,
@@ -40,7 +90,7 @@ class LearningDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    plan.title,
+                    widget.plan.title,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -50,7 +100,7 @@ class LearningDetailScreen extends StatelessWidget {
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [plan.color, plan.color.withOpacity(.6), Colors.white],
+                    colors: [widget.plan.color, widget.plan.color.withOpacity(.6), Colors.white],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -70,14 +120,14 @@ class LearningDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            plan.progressLabel,
+                            widget.plan.progressLabel,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            plan.schedule,
+                            widget.plan.schedule,
                             textAlign: TextAlign.right,
                             style: theme.textTheme.labelLarge?.copyWith(color: AppColors.textSecondary),
                           ),
@@ -93,12 +143,12 @@ class LearningDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
             sliver: SliverList.list(
               children: [
-                _PrimaryInfoCard(plan: plan),
+                _PrimaryInfoCard(plan: widget.plan),
                 const SizedBox(height: 24),
                 Text('Ringkasan program', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 12),
                 Text(
-                  'Sesi difokuskan untuk memperdalam ${plan.title.toLowerCase()} dengan praktik terarah. Peserta akan mendapatkan feedback langsung dari ${plan.mentor} dan akses referensi yang dibagikan selama kelas.',
+                  'Sesi difokuskan untuk memperdalam ${widget.plan.title.toLowerCase()} dengan praktik terarah. Peserta akan mendapatkan feedback langsung dari ${widget.plan.mentor} dan akses referensi yang dibagikan selama kelas.',
                   style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 18),
@@ -137,16 +187,19 @@ class LearningDetailScreen extends StatelessWidget {
                 const SizedBox(height: 28),
                 Text('Modul pembelajaran', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 12),
-                ...modules
-                    .asMap()
-                    .entries
-                    .map(
-                      (entry) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _ModuleTile(index: entry.key + 1, module: entry.value),
-                      ),
-                    )
-                    .toList(),
+                if (_isLoadingModules)
+                   const Center(child: CircularProgressIndicator())
+                else
+                  ..._modules
+                      .asMap()
+                      .entries
+                      .map(
+                        (entry) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _ModuleTile(index: entry.key + 1, module: entry.value),
+                        ),
+                      )
+                      .toList(),
                 const SizedBox(height: 8),
                 PrimaryButton(
                   label: 'Mulai sesi berikutnya',
@@ -181,7 +234,6 @@ class _PrimaryInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -271,57 +323,89 @@ class _ModuleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: AppColors.primary.withOpacity(.12),
-            child: Text(
-              index.toString().padLeft(2, '0'),
-              style: const TextStyle(
-                color: AppColors.primaryDark,
-                fontWeight: FontWeight.w700,
+    return InkWell(
+      onTap: module.quizId != null
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailQuizScreen(quizId: module.quizId),
+                ),
+              );
+            }
+          : null,
+      borderRadius: BorderRadius.circular(26),
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(26),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: AppColors.primary.withOpacity(.12),
+              child: Text(
+                index.toString().padLeft(2, '0'),
+                style: const TextStyle(
+                  color: AppColors.primaryDark,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  module.title,
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.schedule_rounded, size: 16, color: AppColors.muted),
-                    const SizedBox(width: 6),
-                    Text(module.duration, style: theme.textTheme.labelMedium?.copyWith(color: AppColors.muted)),
-                    const SizedBox(width: 18),
-                    const Icon(Icons.file_present_rounded, size: 16, color: AppColors.muted),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        module.deliverable,
-                        style: theme.textTheme.labelMedium?.copyWith(color: AppColors.muted),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          module.title,
+                          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      if (module.quizId != null)
+                        Container(
+                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                           decoration: BoxDecoration(
+                             color: AppColors.secondary,
+                             borderRadius: BorderRadius.circular(8),
+                           ),
+                           child: const Text(
+                             'Quiz',
+                             style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                           ),
+                        )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.schedule_rounded, size: 16, color: AppColors.muted),
+                      const SizedBox(width: 6),
+                      Text(module.duration, style: theme.textTheme.labelMedium?.copyWith(color: AppColors.muted)),
+                      const SizedBox(width: 18),
+                      const Icon(Icons.file_present_rounded, size: 16, color: AppColors.muted),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          module.deliverable,
+                          style: theme.textTheme.labelMedium?.copyWith(color: AppColors.muted),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -372,11 +456,17 @@ class _ReferenceCard extends StatelessWidget {
 }
 
 class _LearningModule {
-  const _LearningModule({required this.title, required this.duration, required this.deliverable});
+  const _LearningModule({
+    required this.title,
+    required this.duration,
+    required this.deliverable,
+    this.quizId,
+  });
 
   final String title;
   final String duration;
   final String deliverable;
+  final String? quizId;
 }
 
 class _ReferenceItem {
@@ -429,22 +519,9 @@ const _goals = <String>[
   'Membuat prototype fidelitas menengah lengkap dengan alur utama.',
 ];
 
-final _modulesByPlan = <String, List<_LearningModule>>{
-  'UI Foundation & Research': const [
-    _LearningModule(title: 'Pendalaman persona & journey', duration: '45 menit', deliverable: 'Journey map per persona'),
-    _LearningModule(title: 'Metode usability guerilla', duration: '60 menit', deliverable: 'Checklist sesi uji coba'),
-    _LearningModule(title: 'Storytelling insight', duration: '45 menit', deliverable: 'Narasi temuan & rekomendasi'),
-  ],
-  'Interaction & Prototype': const [
-    _LearningModule(title: 'Menyusun flow kritikal', duration: '40 menit', deliverable: 'Flowchart interaksi'),
-    _LearningModule(title: 'Desain microinteraction', duration: '50 menit', deliverable: 'Dokumentasi state & animasi'),
-    _LearningModule(title: 'Usability checklist', duration: '35 menit', deliverable: 'Checklist heuristik'),
-  ],
-};
-
 final _referencesByPlan = <String, List<_ReferenceItem>>{
   'UI Foundation & Research': const [
-    _ReferenceItem(title: 'Kit Research Ops', description: 'Template screener, script, dan notulasi.', icon: Icons.playbook_rounded),
+    _ReferenceItem(title: 'Kit Research Ops', description: 'Template screener, script, dan notulasi.', icon: Icons.book_rounded),
     _ReferenceItem(title: 'Workbook Insight Synth', description: 'Langkah clustering dan prioritas temuan.', icon: Icons.auto_graph_rounded),
   ],
   'Interaction & Prototype': const [

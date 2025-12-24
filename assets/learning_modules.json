@@ -1,0 +1,42 @@
+{
+  "UI Foundation & Research": [
+    {
+      "title": "Pendalaman persona & journey",
+      "duration": "45 menit",
+      "deliverable": "Journey map per persona",
+      "quizId": "quiz_1"
+    },
+    {
+      "title": "Metode usability guerilla",
+      "duration": "60 menit",
+      "deliverable": "Checklist sesi uji coba",
+      "quizId": null
+    },
+    {
+      "title": "Storytelling insight",
+      "duration": "45 menit",
+      "deliverable": "Narasi temuan & rekomendasi",
+      "quizId": null
+    }
+  ],
+  "Interaction & Prototype": [
+    {
+      "title": "Menyusun flow kritikal",
+      "duration": "40 menit",
+      "deliverable": "Flowchart interaksi",
+      "quizId": "quiz_2"
+    },
+    {
+      "title": "Desain microinteraction",
+      "duration": "50 menit",
+      "deliverable": "Dokumentasi state & animasi",
+      "quizId": null
+    },
+    {
+      "title": "Usability checklist",
+      "duration": "35 menit",
+      "deliverable": "Checklist heuristik",
+      "quizId": null
+    }
+  ]
+}
