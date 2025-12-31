@@ -5,6 +5,7 @@ import '../theme.dart';
 import '../widgets/primary_button.dart';
 import 'learning_detail_screen.dart';
 import 'learning_list_screen.dart';
+import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,11 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _HomeTabContent(onAccountTap: _openAccountDialog),
           const LearningListScreen(),
-          const _ComingSoonTab(
-            title: 'Forum Komunitas',
-            description: 'Tempat diskusi tugas, update kegiatan cohort, dan info lomba.',
-            icon: Icons.forum_outlined,
-          ),
+          const NotificationScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -40,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'Beranda'),
           NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book_rounded), label: 'Belajar'),
-          NavigationDestination(icon: Icon(Icons.forum_outlined), selectedIcon: Icon(Icons.forum_rounded), label: 'Komunitas'),
+          NavigationDestination(icon: Icon(Icons.notifications_outlined), selectedIcon: Icon(Icons.notifications_rounded), label: 'Notifikasi'),
         ],
         selectedIndex: _navIndex,
         onDestinationSelected: (value) => setState(() => _navIndex = value),
@@ -53,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return AppBar(title: const Text('Modul Belajar'), actions: _defaultActions);
       case 2:
-        return AppBar(title: const Text('Forum Komunitas'), actions: _defaultActions);
+        return AppBar(title: const Text('Notifikasi'), actions: _defaultActions);
       default:
         return AppBar(title: const Text('Lumi LMS'), actions: _defaultActions);
     }
@@ -736,44 +733,4 @@ class _TagChip extends StatelessWidget {
   }
 }
 
-class _ComingSoonTab extends StatelessWidget {
-  const _ComingSoonTab({required this.title, required this.description, required this.icon});
 
-  final String title;
-  final String description;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      color: AppColors.background,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 44,
-                backgroundColor: AppColors.primary.withOpacity(.1),
-                child: Icon(icon, color: AppColors.primary, size: 36),
-              ),
-              const SizedBox(height: 18),
-              Text(
-                title,
-                style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                description,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
