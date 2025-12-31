@@ -50,21 +50,21 @@ class QuickStat {
 
 const featuredCourses = <Course>[
   Course(
-    title: 'UI/UX Research Essentials',
+    title: 'Esensi Riset UI/UX',
     category: 'Design Sprint',
     teacher: 'Samantha Lee',
     progress: 0.65,
     color: AppColors.primary,
   ),
   Course(
-    title: 'Advanced Motion Graphics',
-    category: 'Animation',
+    title: 'Motion Graphics Lanjutan',
+    category: 'Animasi',
     teacher: 'Andrew Porter',
     progress: 0.45,
     color: AppColors.accent,
   ),
   Course(
-    title: 'Front-end Architecture',
+    title: 'Arsitektur Front-end',
     category: 'Web Dev',
     teacher: 'Lucia Torres',
     progress: 0.82,
@@ -74,20 +74,20 @@ const featuredCourses = <Course>[
 
 const todaysSchedule = <ScheduleItem>[
   ScheduleItem(
-    course: 'Design Critique Session',
-    time: '09:30 - 11:00 AM',
-    location: 'Room Aurora',
+    course: 'Sesi Kritik Desain',
+    time: '09:30 - 11:00 WIB',
+    location: 'Ruang Aurora',
     avatar: 'SL',
   ),
   ScheduleItem(
-    course: 'React Native Workshop',
-    time: '12:30 - 02:00 PM',
-    location: 'Room Nova',
+    course: 'Workshop React Native',
+    time: '12:30 - 14:00 WIB',
+    location: 'Ruang Nova',
     avatar: 'AP',
   ),
   ScheduleItem(
-    course: 'Career Coaching',
-    time: '03:00 - 04:00 PM',
+    course: 'Bimbingan Karir',
+    time: '15:00 - 16:00 WIB',
     location: 'Virtual',
     avatar: 'LT',
   ),
@@ -95,34 +95,34 @@ const todaysSchedule = <ScheduleItem>[
 
 const quickStats = <QuickStat>[
   QuickStat(
-    label: 'Active Courses',
+    label: 'Kelas Aktif',
     value: '12',
-    delta: '+2 new',
+    delta: '+2 baru',
     icon: Icons.menu_book_rounded,
     color: AppColors.primary,
   ),
   QuickStat(
-    label: 'Completed Tasks',
+    label: 'Tugas Selesai',
     value: '34',
-    delta: '+8 this week',
+    delta: '+8 minggu ini',
     icon: Icons.check_circle_rounded,
     color: AppColors.secondary,
   ),
   QuickStat(
-    label: 'Mentor Hours',
-    value: '18h',
-    delta: '2 booked',
+    label: 'Jam Mentoring',
+    value: '18j',
+    delta: '2 dipesan',
     icon: Icons.headset_mic_rounded,
     color: AppColors.accent,
   ),
 ];
 
 const categories = <String>[
-  'All',
-  'Design',
-  'Development',
-  'Business',
-  'Marketing',
+  'Semua',
+  'Desain',
+  'Pengembangan',
+  'Bisnis',
+  'Pemasaran',
   'Soft Skills',
 ];
 
@@ -176,23 +176,23 @@ class BulletinItem {
 
 const studentMetrics = <StudentMetric>[
   StudentMetric(
-    label: 'Attendance',
+    label: 'Kehadiran',
     value: '92%',
-    helper: 'On track this month',
+    helper: 'Aman bulan ini',
     color: AppColors.secondary,
     icon: Icons.task_alt_rounded,
   ),
   StudentMetric(
-    label: 'Assignments',
+    label: 'Tugas',
     value: '18/20',
-    helper: '2 waiting for review',
+    helper: '2 menunggu review',
     color: AppColors.accent,
     icon: Icons.assignment_turned_in_outlined,
   ),
   StudentMetric(
     label: 'Mentoring',
-    value: '6h',
-    helper: 'Book next session',
+    value: '6j',
+    helper: 'Jadwalkan sesi',
     color: AppColors.primary,
     icon: Icons.headset_mic_rounded,
   ),
