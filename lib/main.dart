@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lumi Learning',
       theme: buildAppTheme(),
-      initialRoute: AppRoutes.splash,
+      initialRoute: AppRoutes.login,
       routes: {
         AppRoutes.splash: (_) => const SplashScreen(),
         AppRoutes.login: (_) => const LoginScreen(),

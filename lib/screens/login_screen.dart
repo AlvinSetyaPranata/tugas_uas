@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/auth_service.dart';
 import '../theme.dart';
 import '../widgets/primary_button.dart';
 
@@ -14,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController(text: 'hello@lumi.design');
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -22,8 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() => _isLoading = true);
+      await AuthService().login();
+      if (!mounted) return;
+      setState(() => _isLoading = false);
       Navigator.pushReplacementNamed(context, '/home');
     }
   }
@@ -175,6 +181,7 @@ class _LoginFormContentState extends State<_LoginFormContent> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController(text: 'hello@lumi.design');
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -183,8 +190,12 @@ class _LoginFormContentState extends State<_LoginFormContent> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() => _isLoading = true);
+      await AuthService().login();
+      if (!mounted) return;
+      setState(() => _isLoading = false);
       Navigator.pushReplacementNamed(context, '/home');
     }
   }
@@ -193,15 +204,16 @@ class _LoginFormContentState extends State<_LoginFormContent> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Masuk',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Masuk',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
           const SizedBox(height: 8),
           Text(
             'Akses dashboard personal Anda dan lanjutkan belajar.',
@@ -242,8 +254,13 @@ class _LoginFormContentState extends State<_LoginFormContent> {
               child: const Text('Lupa kata sandi?'),
             ),
           ),
-          if (widget.isWide) const Spacer() else const SizedBox(height: 32),
-          PrimaryButton(label: 'Lanjutkan', icon: Icons.arrow_forward_rounded, onPressed: _submit),
+          const SizedBox(height: 32),
+          PrimaryButton(
+            label: 'Lanjutkan',
+            icon: Icons.arrow_forward_rounded,
+            onPressed: _isLoading ? null : _submit,
+            loading: _isLoading,
+          ),
           const SizedBox(height: 16),
           Center(
             child: TextButton(
@@ -260,6 +277,6 @@ class _LoginFormContentState extends State<_LoginFormContent> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
