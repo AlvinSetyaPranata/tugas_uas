@@ -29,34 +29,52 @@ class _LearningDetailScreenState extends State<LearningDetailScreen> {
     try {
       final String jsonString = await DefaultAssetBundle.of(context)
           .loadString('assets/learning_modules.json');
-      final Map<String, dynamic> data = json.decode(jsonString);
+      // Decode data safely
+      final dynamic data = json.decode(jsonString);
+      
+      // Safety check: ensure data is a Map
+      if (data is! Map<String, dynamic>) {
+        if (mounted) {
+          setState(() {
+            _modules = _defaultModules;
+            _isLoadingModules = false;
+          });
+        }
+        return;
+      }
 
       final List<dynamic>? modulesJson = data[widget.plan.title];
 
       if (modulesJson != null) {
-        setState(() {
-          _modules = modulesJson
-              .map((m) => _LearningModule(
-                    title: m['title'],
-                    duration: m['duration'],
-                    deliverable: m['deliverable'],
-                    quizId: m['quizId'],
-                  ))
-              .toList();
-          _isLoadingModules = false;
-        });
+        if (mounted) {
+          setState(() {
+            _modules = modulesJson
+                .map((m) => _LearningModule(
+                      title: m['title'] ?? 'Untitled Module',
+                      duration: m['duration'] ?? 'Unknown duration',
+                      deliverable: m['deliverable'] ?? 'No deliverable',
+                      quizId: m['quizId'],
+                    ))
+                .toList();
+            _isLoadingModules = false;
+          });
+        }
       } else {
-        setState(() {
-           _modules = _defaultModules; // Fallback to default if not found in JSON
-           _isLoadingModules = false;
-        });
+        if (mounted) {
+           setState(() {
+             _modules = _defaultModules; // Fallback to default if not found in JSON
+             _isLoadingModules = false;
+          });
+        }
       }
     } catch (e) {
       debugPrint('Error loading modules: $e');
-      setState(() {
-        _modules = _defaultModules; // Fallback on error
-        _isLoadingModules = false;
-      });
+      if (mounted) {
+        setState(() {
+          _modules = _defaultModules; // Fallback on error
+          _isLoadingModules = false;
+        });
+      }
     }
   }
 

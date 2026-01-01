@@ -48,6 +48,121 @@ class QuickStat {
   final Color color;
 }
 
+class ClassOverview {
+  const ClassOverview({
+    required this.title,
+    required this.code,
+    required this.instructor,
+    required this.progress,
+    required this.grade,
+    required this.status,
+    required this.schedule,
+    required this.credits,
+  });
+
+  final String title;
+  final String code;
+  final String instructor;
+  final double progress;
+  final int grade;
+  final String status;
+  final String schedule;
+  final int credits;
+}
+
+const allClassOverviews = <ClassOverview>[
+  ClassOverview(
+    title: 'UI Foundation & Research',
+    code: 'UI-101',
+    instructor: 'Rani Eka',
+    progress: 0.5,
+    grade: 88,
+    status: 'Active',
+    schedule: 'Sen, 09:00',
+    credits: 3,
+  ),
+  ClassOverview(
+    title: 'Interaction & Prototype',
+    code: 'UX-202',
+    instructor: 'Aditya',
+    progress: 0.35,
+    grade: 92,
+    status: 'Active',
+    schedule: 'Rabu, 13:00',
+    credits: 4,
+  ),
+  ClassOverview(
+    title: 'Career Preparation',
+    code: 'CP-300',
+    instructor: 'Shinta',
+    progress: 0.25,
+    grade: 0, // Not graded yet
+    status: 'Active',
+    schedule: 'Jumat, 19:00',
+    credits: 2,
+  ),
+  ClassOverview(
+    title: 'Design Systems',
+    code: 'UI-205',
+    instructor: 'Budi Santoso',
+    progress: 0.0,
+    grade: 0,
+    status: 'Upcoming',
+    schedule: 'Selasa, 10:00',
+    credits: 3,
+  ),
+  ClassOverview(
+    title: 'User Testing Methods',
+    code: 'UX-301',
+    instructor: 'Sarah Jenkins',
+    progress: 0.0,
+    grade: 0,
+    status: 'Upcoming',
+    schedule: 'Kamis, 14:00',
+    credits: 3,
+  ),
+  ClassOverview(
+    title: 'Visual Design Basics',
+    code: 'VD-101',
+    instructor: 'Michael Chen',
+    progress: 1.0,
+    grade: 95,
+    status: 'Completed',
+    schedule: '-',
+    credits: 3,
+  ),
+  ClassOverview(
+    title: 'Intro to Psychology',
+    code: 'PSY-110',
+    instructor: 'Dr. Linda',
+    progress: 1.0,
+    grade: 89,
+    status: 'Completed',
+    schedule: '-',
+    credits: 2,
+  ),
+  ClassOverview(
+    title: 'Digital Marketing 101',
+    code: 'MKT-200',
+    instructor: 'Peter Parker',
+    progress: 0.8,
+    grade: 78,
+    status: 'Active',
+    schedule: 'Sabtu, 09:00',
+    credits: 3,
+  ),
+  ClassOverview(
+    title: 'Web Accessibility',
+    code: 'DEV-202',
+    instructor: 'Ayu Lestari',
+    progress: 0.1,
+    grade: 0,
+    status: 'Active',
+    schedule: 'Senin, 13:00',
+    credits: 2,
+  ),
+];
+
 const featuredCourses = <Course>[
   Course(
     title: 'Esensi Riset UI/UX',

@@ -49,86 +49,42 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 12),
               Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final isWide = constraints.maxWidth > 700;
-                    if (isWide) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(28),
-                              margin: const EdgeInsets.only(right: 24),
-                              decoration: BoxDecoration(
-                                gradient: AppColors.primaryGradient,
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Selamat datang kembali, Designer',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 220,
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(28),
+                        margin: const EdgeInsets.only(bottom: 24),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryGradient,
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Selamat datang kembali, Designer',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                  Text(
-                                    'Lanjutkan progres belajarmu.\n4 sesi mentoring tersisa bulan ini.',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: Colors.white.withOpacity(.8),
-                                        ),
+                            ),
+                            Text(
+                              'Lanjutkan progres belajarmu.\n4 sesi mentoring tersisa bulan ini.',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.white.withOpacity(.8),
                                   ),
-                                ],
-                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: _LoginForm(isWide: true),
-                          ),
-                        ],
-                      );
-                    }
-                    return SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 220,
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(28),
-                            margin: const EdgeInsets.only(bottom: 24),
-                            decoration: BoxDecoration(
-                              gradient: AppColors.primaryGradient,
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Selamat datang kembali, Designer',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                                Text(
-                                  'Lanjutkan progres belajarmu.\n4 sesi mentoring tersisa bulan ini.',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: Colors.white.withOpacity(.8),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          _LoginForm(isWide: false),
-                        ],
+                          ],
+                        ),
                       ),
-                    );
-                  },
+                      const _LoginForm(isWide: false),
+                    ],
+                  ),
                 ),
               ),
             ],
